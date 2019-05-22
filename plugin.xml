@@ -65,6 +65,12 @@
         <resource-file src="src/android/res/drawable-xhdpi/ic_action_remove.png" target="res/drawable-xhdpi/ic_action_remove.png" />
         <resource-file src="src/android/res/drawable-xxhdpi/ic_action_remove.png" target="res/drawable-xxhdpi/ic_action_remove.png" />
 
+        <!-- Preference to enable cleartext support which is disabled by default for Android 9 (API Level 28) -->
+        <preference name="CLEARTEXT_TRAFFIC_PERMITTED" default="false" />
+        <edit-config file="app/src/main/res/xml/network_security_config.xml" target="/network-security-config/base-config" mode="merge">
+            <base-config cleartextTrafficPermitted="$CLEARTEXT_TRAFFIC_PERMITTED"/>
+        </edit-config> 
+
     </platform>
 
     <!-- ios -->
