@@ -781,12 +781,12 @@ BOOL viewRenderedAtLeastOneTime = FALSE;
         [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
     }
 
-    self.view.backgroundColor = [[[UIDevice currentDevice] systemVersion] floatValue] >= 13 ? [UIColor systemBackgroundColor] : [UIColor whiteColor];
+    self.view.backgroundColor = IsAtLeastiOSVersion(@"13.0") ? [UIColor systemBackgroundColor] : [UIColor whiteColor];
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.addressLabel];
     [self.view addSubview:self.spinner];
 
-    UIEdgeInsets insets = [[[UIApplication sharedApplication] delegate] window].safeAreaInsets;
+    UIEdgeInsets insets = [self getWindowSafeAreaInsets];
     self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, insets.top, self.view.bounds.size.width, self.view.bounds.size.height - insets.top - insets.bottom)];
     self.backgroundView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     self.backgroundView.backgroundColor = [UIColor grayColor];
@@ -1016,7 +1016,7 @@ BOOL viewRenderedAtLeastOneTime = FALSE;
 }
 
 - (void) positionViews:(NSArray *)views {
-    UIEdgeInsets insets = [[[UIApplication sharedApplication] delegate] window].safeAreaInsets;
+    UIEdgeInsets insets = [self getWindowSafeAreaInsets];
     
     CGFloat webViewHeight = self.view.bounds.size.height - insets.top - insets.bottom;
     for (UIView *view in views) {
@@ -1033,6 +1033,16 @@ BOOL viewRenderedAtLeastOneTime = FALSE;
             y += height;
         }
     }
+}
+
+//
+// iOS 11 introduced safe area insets. Before this the whole screen was used except for the status bar at the
+// top of the screen.
+//
+- (UIEdgeInsets) getWindowSafeAreaInsets {
+    return IsAtLeastiOSVersion(@"11.0") ?
+            [[[UIApplication sharedApplication] delegate] window].safeAreaInsets :
+            UIEdgeInsetsMake([self getStatusBarOffset], 0, 0, 0);
 }
 
 //
