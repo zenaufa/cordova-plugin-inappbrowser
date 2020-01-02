@@ -919,7 +919,7 @@ BOOL isExiting = FALSE;
     [self.view addSubview:self.spinner];
     
     self.topBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, webViewBounds.size.width, webViewBounds.origin.y)];
-    self.topBarView.backgroundColor = [UIColor whiteColor];
+    self.topBarView.backgroundColor = [[[UIDevice currentDevice] systemVersion] floatValue] >= 13 ? [UIColor systemBackgroundColor] : [UIColor whiteColor];
     [self.view addSubview:self.topBarView];
     [self.view sendSubviewToBack:self.topBarView];
     
