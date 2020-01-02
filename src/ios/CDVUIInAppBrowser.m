@@ -624,6 +624,8 @@ static CDVUIInAppBrowser* instance = nil;
 
 @synthesize currentURL;
 
+BOOL viewRenderedAtLeastOneTime = FALSE;
+
 - (id)initWithUserAgent:(NSString*)userAgent prevUserAgent:(NSString*)prevUserAgent browserOptions: (CDVInAppBrowserOptions*) browserOptions
 {
     self = [super init];
@@ -705,7 +707,7 @@ static CDVUIInAppBrowser* instance = nil;
     self.toolbar.autoresizingMask = toolbarIsAtBottom ? (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin) : UIViewAutoresizingFlexibleWidth;
     self.toolbar.barStyle = UIBarStyleBlackOpaque;
     self.toolbar.clearsContextBeforeDrawing = NO;
-    self.toolbar.clipsToBounds = NO;
+    self.toolbar.clipsToBounds = YES;
     self.toolbar.contentMode = UIViewContentModeScaleToFill;
     self.toolbar.hidden = NO;
     self.toolbar.multipleTouchEnabled = NO;
@@ -779,10 +781,16 @@ static CDVUIInAppBrowser* instance = nil;
         [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
     }
 
-    self.view.backgroundColor = [UIColor grayColor];
+    self.view.backgroundColor = [[[UIDevice currentDevice] systemVersion] floatValue] >= 13 ? [UIColor systemBackgroundColor] : [UIColor whiteColor];
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.addressLabel];
     [self.view addSubview:self.spinner];
+
+    UIEdgeInsets insets = [[[UIApplication sharedApplication] delegate] window].safeAreaInsets;
+    self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, insets.top, self.view.bounds.size.width, self.view.bounds.size.height - insets.top - insets.bottom)];
+    self.backgroundView.backgroundColor = [UIColor grayColor];
+    [self.view addSubview:self.backgroundView];
+    [self.view sendSubviewToBack:self.backgroundView];
 }
 
 - (void) setWebViewFrame : (CGRect) frame {
@@ -920,6 +928,7 @@ static CDVUIInAppBrowser* instance = nil;
 
 - (void)viewDidLoad
 {
+    viewRenderedAtLeastOneTime = FALSE;
     [super viewDidLoad];
 }
 
@@ -992,12 +1001,37 @@ static CDVUIInAppBrowser* instance = nil;
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    if (IsAtLeastiOSVersion(@"7.0")) {
-        [[UIApplication sharedApplication] setStatusBarStyle:[self preferredStatusBarStyle]];
+    if (IsAtLeastiOSVersion(@"7.0") && !viewRenderedAtLeastOneTime) {
+        viewRenderedAtLeastOneTime = TRUE;
+        
+        if ([_browserOptions.toolbarposition isEqualToString:kInAppBrowserToolbarBarPositionTop]) {
+            [self positionViews:@[ self.toolbar, self.webView, self.addressLabel ]];
+        } else {
+            [self positionViews:@[ self.webView, self.toolbar, self.addressLabel ]];
+        }
     }
-    [self rePositionViews];
-
+    
     [super viewWillAppear:animated];
+}
+
+- (void) positionViews:(NSArray *)views {
+    UIEdgeInsets insets = [[[UIApplication sharedApplication] delegate] window].safeAreaInsets;
+    
+    CGFloat webViewHeight = self.view.bounds.size.height - insets.top - insets.bottom;
+    for (UIView *view in views) {
+        if (!view.hidden && view != self.webView) {
+            webViewHeight -= view.bounds.size.height;
+        }
+    }
+    
+    CGFloat y = insets.top;
+    for (UIView *view in views) {
+        if (!view.hidden) {
+            CGFloat height = view != self.webView ? view.bounds.size.height : webViewHeight;
+            view.frame = CGRectMake(0, y, self.view.bounds.size.width, height);
+            y += height;
+        }
+    }
 }
 
 //
@@ -1009,13 +1043,6 @@ static CDVUIInAppBrowser* instance = nil;
     CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
     float statusBarOffset = IsAtLeastiOSVersion(@"7.0") ? MIN(statusBarFrame.size.width, statusBarFrame.size.height) : 0.0;
     return statusBarOffset;
-}
-
-- (void) rePositionViews {
-    if ([_browserOptions.toolbarposition isEqualToString:kInAppBrowserToolbarBarPositionTop]) {
-        [self.webView setFrame:CGRectMake(self.webView.frame.origin.x, TOOLBAR_HEIGHT, self.webView.frame.size.width, self.webView.frame.size.height)];
-        [self.toolbar setFrame:CGRectMake(self.toolbar.frame.origin.x, [self getStatusBarOffset], self.toolbar.frame.size.width, self.toolbar.frame.size.height)];
-    }
 }
 
 // Helper function to convert hex color string to UIColor
