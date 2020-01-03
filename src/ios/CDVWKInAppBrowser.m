@@ -839,7 +839,7 @@ BOOL isExiting = FALSE;
     self.toolbar.autoresizingMask = toolbarIsAtBottom ? (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin) : UIViewAutoresizingFlexibleWidth;
     self.toolbar.barStyle = UIBarStyleBlackOpaque;
     self.toolbar.clearsContextBeforeDrawing = NO;
-    self.toolbar.clipsToBounds = NO;
+    self.toolbar.clipsToBounds = YES;
     self.toolbar.contentMode = UIViewContentModeScaleToFill;
     self.toolbar.hidden = NO;
     self.toolbar.multipleTouchEnabled = NO;
@@ -912,17 +912,24 @@ BOOL isExiting = FALSE;
     } else {
         [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
     }
-    
-    self.view.backgroundColor = [UIColor grayColor];
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 130000
+    self.view.backgroundColor = IsAtLeastiOSVersion(@"13.0") ? [UIColor systemBackgroundColor] : [UIColor whiteColor];
+#else
+    self.view.backgroundColor = [UIColor whiteColor];
+#endif
+
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.addressLabel];
     [self.view addSubview:self.spinner];
-    
-    self.topBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, webViewBounds.size.width, webViewBounds.origin.y)];
-    self.topBarView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.topBarView];
-    [self.view sendSubviewToBack:self.topBarView];
-    
+
+    UIEdgeInsets insets = [self getWindowSafeAreaInsets];
+    self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, insets.top, self.view.bounds.size.width, self.view.bounds.size.height - insets.top - insets.bottom)];
+    self.backgroundView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+    self.backgroundView.backgroundColor = [UIColor grayColor];
+    [self.view addSubview:self.backgroundView];
+    [self.view sendSubviewToBack:self.backgroundView];
+
     if (@available(iOS 12.0, *)) {
         [[NSNotificationCenter defaultCenter]
             addObserver:self
@@ -1138,44 +1145,49 @@ BOOL isExiting = FALSE;
     [self.webView goForward];
 }
 
-- (BOOL)hasTopNotch {
-    if (@available(iOS 11.0, *)) {
-        return [[[UIApplication sharedApplication] delegate] window].safeAreaInsets.top > 20.0;
-    }
-    
-    return  NO;
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     if (IsAtLeastiOSVersion(@"7.0") && !viewRenderedAtLeastOnce) {
         viewRenderedAtLeastOnce = TRUE;
-        CGRect viewBounds = [self.webView bounds];
         
-        if ([self hasTopNotch]) {
-            BOOL toolbarVisible = !self.toolbar.hidden;
-            BOOL toolbarIsAtBottom = ![_browserOptions.toolbarposition isEqualToString:kInAppBrowserToolbarBarPositionTop];
-            
-            float topSafeArea = [[[UIApplication sharedApplication] delegate] window].safeAreaInsets.top;
-            float bottomSafeArea = [[[UIApplication sharedApplication] delegate] window].safeAreaInsets.bottom;
-            
-            if (toolbarVisible && toolbarIsAtBottom) {
-                bottomSafeArea = 0.0;
-            }
-            
-            viewBounds.origin.y = topSafeArea;
-            viewBounds.size.height = viewBounds.size.height - (topSafeArea + bottomSafeArea);
+        if ([_browserOptions.toolbarposition isEqualToString:kInAppBrowserToolbarBarPositionTop]) {
+            [self positionViews:@[ self.toolbar, self.webView, self.addressLabel ]];
         } else {
-            viewBounds.origin.y = STATUSBAR_HEIGHT;
-            viewBounds.size.height = viewBounds.size.height - STATUSBAR_HEIGHT;
+            [self positionViews:@[ self.webView, self.toolbar, self.addressLabel ]];
         }
-        self.webView.frame = viewBounds;
-        self.topBarView.frame = CGRectMake(0, 0, viewBounds.size.width, viewBounds.origin.y);
-        [[UIApplication sharedApplication] setStatusBarStyle:[self preferredStatusBarStyle]];
     }
-    [self rePositionViews];
     
     [super viewWillAppear:animated];
+}
+
+- (void) positionViews:(NSArray *)views {
+    UIEdgeInsets insets = [self getWindowSafeAreaInsets];
+    
+    CGFloat webViewHeight = self.view.bounds.size.height - insets.top - insets.bottom;
+    for (UIView *view in views) {
+        if (!view.hidden && view != self.webView) {
+            webViewHeight -= view.bounds.size.height;
+        }
+    }
+    
+    CGFloat y = insets.top;
+    for (UIView *view in views) {
+        if (!view.hidden) {
+            CGFloat height = view != self.webView ? view.bounds.size.height : webViewHeight;
+            view.frame = CGRectMake(0, y, self.view.bounds.size.width, height);
+            y += height;
+        }
+    }
+}
+
+//
+// iOS 11 introduced safe area insets. Before this the whole screen was used except for the status bar at the
+// top of the screen.
+//
+- (UIEdgeInsets) getWindowSafeAreaInsets {
+    return IsAtLeastiOSVersion(@"11.0") ?
+            [[[UIApplication sharedApplication] delegate] window].safeAreaInsets :
+            UIEdgeInsetsMake([self getStatusBarOffset], 0, 0, 0);
 }
 
 //
@@ -1187,14 +1199,6 @@ BOOL isExiting = FALSE;
     CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
     float statusBarOffset = IsAtLeastiOSVersion(@"7.0") ? MIN(statusBarFrame.size.width, statusBarFrame.size.height) : 0.0;
     return statusBarOffset;
-}
-
-- (void) rePositionViews {
-    if ([_browserOptions.toolbarposition isEqualToString:kInAppBrowserToolbarBarPositionTop]) {
-        [self.webView setFrame:CGRectMake(self.webView.frame.origin.x, TOOLBAR_HEIGHT, self.webView.frame.size.width, self.webView.frame.size.height)];
-        [self.topBarView setFrame:CGRectMake(self.topBarView.frame.origin.x, self.topBarView.frame.origin.y, self.topBarView.frame.size.width, self.webView.frame.origin.y)];
-        [self.toolbar setFrame:CGRectMake(self.toolbar.frame.origin.x, [self getStatusBarOffset], self.toolbar.frame.size.width, self.toolbar.frame.size.height)];
-    }
 }
 
 - (void)keyboardWillHide {

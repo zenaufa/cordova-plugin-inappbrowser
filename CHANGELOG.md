@@ -1,0 +1,46 @@
+# Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+### Fixes
+- Background color now takes dark mode into account [RNMT-3631](https://outsystemsrd.atlassian.net/browse/RNMT-3631)
+- Improvements to view positioning depending on which options are used [RNMT-3631](https://outsystemsrd.atlassian.net/browse/RNMT-3631)
+- Fixes related to the usage of safe area insets [RNMT-3631](https://outsystemsrd.atlassian.net/browse/RNMT-3631)
+
+## [3.1.0-OS2] - 2019-10-04
+### Fixes
+- Now opens in iOS 13 when using WKWebView [RNMT-3324](https://outsystemsrd.atlassian.net/browse/RNMT-3324)
+- Options unmarshalling is now based on property type instead of content type [RNMT-3309](https://outsystemsrd.atlassian.net/browse/RNMT-3309)
+
+## [3.1.0-OS1] - 2019-09-17
+### Fixes
+- User-Agent is no longer incorrect in the first usage of open [RNMT-3299](https://outsystemsrd.atlassian.net/browse/RNMT-3299)
+- Keyboard no longer breaks UI due to scroll view not being repositioned [RNMT-3293](https://outsystemsrd.atlassian.net/browse/RNMT-3293)
+
+## [3.1.0-OS] - 2019-09-10
+### Changes
+- Merge upstream (3.1.0) into OutSystems branch [RNMT-3220](https://outsystemsrd.atlassian.net/browse/RNMT-3220)
+
+### Additions
+- Use WKWebView engine when available [RNMT-3220](https://outsystemsrd.atlassian.net/browse/RNMT-3220)
+
+### Fixes
+- Top safe area inset is now being correctly used when using WKWebView [RNMT-3220](https://outsystemsrd.atlassian.net/browse/RNMT-3220)
+
+## [3.0.0-OS1] - 2019-06-04
+### Additions
+- Add a hook to conditionally set cleartextTrafficPermitted to true [RNMT-2921](https://outsystemsrd.atlassian.net/browse/RNMT-2921)
+
+## [3.0.0-os] - 2018-12-04
+### Changes
+- Merge upstream (3.0.0) into OutSystems branch
+
+[Unreleased]: https://github.com/OutSystems/cordova-plugin-inappbrowser/compare/3.1.0-OS2...HEAD
+[3.1.0-OS2]: https://github.com/OutSystems/cordova-plugin-inappbrowser/compare/3.1.0-OS1...3.1.0-OS2
+[3.1.0-OS1]: https://github.com/OutSystems/cordova-plugin-inappbrowser/compare/3.1.0-OS...3.1.0-OS1
+[3.1.0-OS]: https://github.com/OutSystems/cordova-plugin-inappbrowser/compare/3.0.0-OS1...3.1.0-OS
+[3.0.0-OS1]: https://github.com/OutSystems/cordova-plugin-inappbrowser/compare/3.0.0-os...3.0.0-OS1
+[3.0.0-os]: https://github.com/OutSystems/cordova-plugin-inappbrowser/compare/1.7.0-os...3.0.0-os
