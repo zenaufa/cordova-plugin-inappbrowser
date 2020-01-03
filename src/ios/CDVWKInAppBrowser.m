@@ -912,8 +912,13 @@ BOOL isExiting = FALSE;
     } else {
         [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
     }
-    
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 130000
     self.view.backgroundColor = IsAtLeastiOSVersion(@"13.0") ? [UIColor systemBackgroundColor] : [UIColor whiteColor];
+#else
+    self.view.backgroundColor = [UIColor whiteColor];
+#endif
+
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.addressLabel];
     [self.view addSubview:self.spinner];
