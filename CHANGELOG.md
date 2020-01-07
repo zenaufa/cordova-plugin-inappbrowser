@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Changes
+- Add compile-time decision for disabling UIWebView [RNMT-3569](https://outsystemsrd.atlassian.net/browse/RNMT-3569)
+
 ### Fixes
 - Background color now takes dark mode into account [RNMT-3631](https://outsystemsrd.atlassian.net/browse/RNMT-3631)
 - Improvements to view positioning depending on which options are used [RNMT-3631](https://outsystemsrd.atlassian.net/browse/RNMT-3631)
