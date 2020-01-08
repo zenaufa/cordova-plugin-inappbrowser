@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0-OS3] - 2020-01-08
 ### Changes
 - Add compile-time decision for disabling UIWebView [RNMT-3569](https://outsystemsrd.atlassian.net/browse/RNMT-3569)
 
@@ -42,7 +43,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changes
 - Merge upstream (3.0.0) into OutSystems branch
 
-[Unreleased]: https://github.com/OutSystems/cordova-plugin-inappbrowser/compare/3.1.0-OS2...HEAD
+[Unreleased]: https://github.com/OutSystems/cordova-plugin-inappbrowser/compare/3.1.0-OS3...HEAD
+[3.1.0-OS3]: https://github.com/OutSystems/cordova-plugin-inappbrowser/compare/3.1.0-OS2...3.1.0-OS3
 [3.1.0-OS2]: https://github.com/OutSystems/cordova-plugin-inappbrowser/compare/3.1.0-OS1...3.1.0-OS2
 [3.1.0-OS1]: https://github.com/OutSystems/cordova-plugin-inappbrowser/compare/3.1.0-OS...3.1.0-OS1
 [3.1.0-OS]: https://github.com/OutSystems/cordova-plugin-inappbrowser/compare/3.0.0-OS1...3.1.0-OS
