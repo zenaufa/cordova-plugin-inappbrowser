@@ -1,4 +1,4 @@
-﻿#If ignorance is bliss, then somebody knock the smile off my face
+#If ignorance is bliss, then somebody knock the smile off my face
 
 *.csproj.user
 *.suo
@@ -12,6 +12,11 @@ Thumbs.db
 *.swp
 *.user
 *.idea
+
+*.pbxuser
+xcuserdata
+!xcshareddata
+!xcschemes
 
 node_modules
 !hooks/outsystems/node_modules

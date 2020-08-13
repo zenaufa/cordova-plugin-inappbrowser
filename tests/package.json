@@ -1,14 +1,13 @@
 {
   "name": "cordova-plugin-inappbrowser-tests",
-  "version": "4.0.0",
+  "version": "4.0.0-OS1",
   "description": "",
-  "cordova": {
-    "id": "cordova-plugin-inappbrowser-tests",
-    "platforms": []
-  },
   "keywords": [
     "ecosystem:cordova"
   ],
-  "author": "",
+  "dependencies": {
+    "cordova-ios": "4.5.5"
+  },
+  "author": "Outsystems Inc",
   "license": "Apache-2.0"
 }

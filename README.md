@@ -84,7 +84,7 @@ instance, or the system browser.
 - __target__: The target in which to load the URL, an optional parameter that defaults to `_self`. _(String)_
 
     - `_self`: Opens in the Cordova WebView if the URL is in the white list, otherwise it opens in the `InAppBrowser`.
-    - `_blank`: Opens in the `InAppBrowser`.
+    - `_blank`: Opens in the `InAppBrowser` WebView.
     - `_system`: Opens in the system's web browser.
 
 - __options__: Options for the `InAppBrowser`. Optional, defaulting to: `location=yes`. _(String)_
@@ -150,6 +150,39 @@ instance, or the system browser.
     - __hardwareback__: works the same way as on Android platform.
     - __fullscreen__: set to `yes` to create the browser control without a border around it. Please note that if __location=no__ is also specified, there will be no control presented to user to close IAB window.
 
+## cordova.InAppBrowser.openSystemBrowser
+
+Opens a URL in a new `InAppBrowser` instance, in a new system browser.
+
+    var ref = cordova.InAppBrowser.openSystemBrowser(url, target, options);
+
+- __ref__: Reference to the `InAppBrowser` window when the target is set to `'_blank'`. _(InAppBrowser)_
+
+- __url__: The URL to load _(String)_. Call `encodeURI()` on this if the URL contains Unicode characters.
+
+- __target__: The target in which to load the URL, an optional parameter that defaults to `_self`. _(String)_
+
+    - `_self`: Opens in the Cordova WebView if the URL is in the white list, otherwise it opens in the `InAppBrowser`.
+    - `_blank`: Opens in the `InAppBrowser` system browser.
+    - `_system`: Opens in the system's web browser.
+
+- __options__: Options for the `InAppBrowser`. Optional, defaulting to: ``. _(String)_
+
+    The `options` string must not contain any blank space, and each feature's name/value pairs must be separated by a comma. Feature names are case insensitive.
+
+    iOS supports these additional options:
+
+    - __hidden__: set to `yes` to create the browser and load the page, but not show it. The loadstop event fires when loading is complete. Omit or set to `no` (default) to have the browser open and load normally.
+    - __clearcache__: set to `yes` to have the browser's cookie cache cleared before the new window is opened
+    - __clearsessioncache__: set to `yes` to have the session cookie cache cleared before the new window is opened. For WKWebView, requires iOS 11+ on target device.
+    - __cleardata__: set to `yes` to have the browser's entire local storage cleared (cookies, HTML5 local storage, IndexedDB, etc.) before the new window is opened
+    - __closebuttoncaption__: set to a string to use as the __Done__ button's caption. This value needs to be __Done__, __Cancel__, __Close__.
+    - __navigationbuttoncolor__:  set as a valid hex color string, for example: `#00ff00`, to change from the default color. Only applicable if navigation buttons are visible.
+    - __navigationbartintcolor__:  set as a valid hex color string, for example: `#00ff00`, to change from the default color.
+    - __barscollapsing__:  set to `yes` or `no` to collapse the bar when scrolling.
+    - __readersmode__:  set to `yes` or `no` to enable readers mode.
+    - __presentationstyle__:  Set to `pagesheet`, `formsheet` or `fullscreen` to set the [presentation style](https://developer.apple.com/documentation/uikit/uimodalpresentationstyle) (defaults to `fullscreen`).
+    - __transitionstyle__: Set to `fliphorizontal`, `crossdissolve` or `coververtical` to set the [transition style](https://developer.apple.com/documentation/uikit/uimodaltransitionstyle) (defaults to `coververtical`).
 
 ### Supported Platforms
 

@@ -49,16 +49,16 @@
         },
         _loadAfterBeforeload: function (strUrl) {
             strUrl = urlutil.makeAbsolute(strUrl);
-            exec(null, null, 'InAppBrowser', 'loadAfterBeforeload', [strUrl]);
+            exec(null, null, rootName, 'loadAfterBeforeload', [strUrl]);
         },
         close: function (eventname) {
-            exec(null, null, 'InAppBrowser', 'close', []);
+            exec(null, null, rootName, 'close', []);
         },
         show: function (eventname) {
-            exec(null, null, 'InAppBrowser', 'show', []);
+            exec(null, null, rootName, 'show', []);
         },
         hide: function (eventname) {
-            exec(null, null, 'InAppBrowser', 'hide', []);
+            exec(null, null, rootName, 'hide', []);
         },
         addEventListener: function (eventname, f) {
             if (eventname in this.channels) {
@@ -73,9 +73,9 @@
 
         executeScript: function (injectDetails, cb) {
             if (injectDetails.code) {
-                exec(cb, null, 'InAppBrowser', 'injectScriptCode', [injectDetails.code, !!cb]);
+                exec(cb, null, rootName, 'injectScriptCode', [injectDetails.code, !!cb]);
             } else if (injectDetails.file) {
-                exec(cb, null, 'InAppBrowser', 'injectScriptFile', [injectDetails.file, !!cb]);
+                exec(cb, null, rootName, 'injectScriptFile', [injectDetails.file, !!cb]);
             } else {
                 throw new Error('executeScript requires exactly one of code or file to be specified');
             }
@@ -83,17 +83,44 @@
 
         insertCSS: function (injectDetails, cb) {
             if (injectDetails.code) {
-                exec(cb, null, 'InAppBrowser', 'injectStyleCode', [injectDetails.code, !!cb]);
+                exec(cb, null, rootName, 'injectStyleCode', [injectDetails.code, !!cb]);
             } else if (injectDetails.file) {
-                exec(cb, null, 'InAppBrowser', 'injectStyleFile', [injectDetails.file, !!cb]);
+                exec(cb, null, rootName, 'injectStyleFile', [injectDetails.file, !!cb]);
             } else {
                 throw new Error('insertCSS requires exactly one of code or file to be specified');
             }
-        }
+        },
+        rootName: 'InAppBrowser'
     };
 
-    module.exports = function (strUrl, strWindowName, strWindowFeatures, callbacks) {
-        // Don't catch calls that write to existing frames (e.g. named iframes).
+    module.exports = {
+      open: function (strUrl, strWindowName, strWindowFeatures, callbacks) {
+        console.log('Started Open');
+          // Don't catch calls that write to existing frames (e.g. named iframes).
+          if (window.frames && window.frames[strWindowName]) {
+              var origOpenFunc = modulemapper.getOriginalSymbol(window, 'open');
+              return origOpenFunc.apply(window, arguments);
+          }
+
+          strUrl = urlutil.makeAbsolute(strUrl);
+          var iab = new InAppBrowser();
+          iab.rootName = 'InAppBrowser';
+
+          callbacks = callbacks || {};
+          for (var callbackName in callbacks) {
+              iab.addEventListener(callbackName, callbacks[callbackName]);
+          }
+
+          var cb = function (eventname) {
+              iab._eventHandler(eventname);
+          };
+
+          strWindowFeatures = strWindowFeatures || '';
+
+          exec(cb, cb, 'InAppBrowser', 'open', [strUrl, strWindowName, strWindowFeatures]);
+          return iab;
+      },
+      openSystemBrowser: function (strUrl, strWindowName, strWindowFeatures, callbacks) {
         if (window.frames && window.frames[strWindowName]) {
             var origOpenFunc = modulemapper.getOriginalSymbol(window, 'open');
             return origOpenFunc.apply(window, arguments);
@@ -101,6 +128,7 @@
 
         strUrl = urlutil.makeAbsolute(strUrl);
         var iab = new InAppBrowser();
+        iab.rootName = 'SystemInAppBrowser';
 
         callbacks = callbacks || {};
         for (var callbackName in callbacks) {
@@ -113,7 +141,8 @@
 
         strWindowFeatures = strWindowFeatures || '';
 
-        exec(cb, cb, 'InAppBrowser', 'open', [strUrl, strWindowName, strWindowFeatures]);
+        exec(cb, cb, 'SystemInAppBrowser', 'open', [strUrl, strWindowName, strWindowFeatures]);
         return iab;
+      }
     };
 })();
