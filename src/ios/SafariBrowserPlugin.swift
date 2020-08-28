@@ -20,6 +20,7 @@ class SafariBrowserPlugin: NSObject {
     func openInInAppBrowser(url: URL, options: SafariBrowserConfigurations) {
         if inAppBrowserViewController == nil {
             self.inAppBrowserViewController = SafariViewController(url: url, options: options)
+            self.inAppBrowserViewController?.delegate = self
         }
 
         if !options.hidden {
@@ -63,6 +64,7 @@ class SafariBrowserPlugin: NSObject {
                 self?.window?.resignKey()
                 self?.window?.removeFromSuperview()
                 self?.window = nil
+                self?.inAppBrowserViewController = nil
             })
         }
     }
