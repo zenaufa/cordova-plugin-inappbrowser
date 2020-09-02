@@ -1,5 +1,3 @@
-# For now just a simple squeleton needs proper setting for android build and tests tasks
-
 parameters:
 - name: workingDirectory
   type: string

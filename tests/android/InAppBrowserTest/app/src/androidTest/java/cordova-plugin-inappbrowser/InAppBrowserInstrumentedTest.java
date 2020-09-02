@@ -1,4 +1,4 @@
-package cordova-plugin-inappbrowser;
+package com.outsystems.plugin.inappbrowsertests;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

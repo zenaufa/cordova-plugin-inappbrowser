@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
-    package="cordova-plugin-inappbrowser">
+    package="com.outsystems.plugin.inappbrowsertests">
 
     <application
         android:allowBackup="true"
