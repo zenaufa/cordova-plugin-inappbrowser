@@ -22,10 +22,12 @@ jobs:
     - template: 'npm-steps.yml'
       parameters:
         workingDirectory: ${{ parameters.workingDirectory }}
+    - script: npm run
+      workingDirectory: ${{ parameters.workingDirectory }}
     - task: Gradle@2
       inputs:
-        workingDirectory: '${{ parameters.workingDirectory }}/**/'
-        gradleWrapperFile: 'gradlew'
+        cwd: '${{ parameters.workingDirectory }}/InAppBrowserTest'
+        gradleWrapperFile: '${{ parameters.workingDirectory }}/InAppBrowserTest/gradlew'
         publishJUnitResults: true
         testResultsFiles: '**/TEST-*.xml'
-        tasks: 'build test'
+        tasks: 'test'
