@@ -22,5 +22,10 @@ jobs:
     - template: 'npm-steps.yml'
       parameters:
         workingDirectory: ${{ parameters.workingDirectory }}
-    - script: 'echo successful tests' # Mocked response
-      workingDirectory: ${{ parameters.workingDirectory }}
+    - task: Gradle@2
+      inputs:
+        workingDirectory: '${{ parameters.workingDirectory }}/**/'
+        gradleWrapperFile: 'gradlew'
+        publishJUnitResults: true
+        testResultsFiles: '**/TEST-*.xml'
+        tasks: 'build test'
