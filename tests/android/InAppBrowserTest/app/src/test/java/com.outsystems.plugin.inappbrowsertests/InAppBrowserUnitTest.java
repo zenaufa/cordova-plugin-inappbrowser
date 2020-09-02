@@ -27,6 +27,14 @@ public class InAppBrowserUnitTest {
         public String getPrivateHelloWorldString(JSONObject jsonObject, boolean withCache) {
             return privateHelloWorldString();
         }
+
+        public String privateHelloWorldString() {
+            return "Hello World";
+        }
+
+        public String publicHelloWorld() {
+            return "Hello World";
+        }
     }
 
     private TestableInAppBrowser templatePlugin;
