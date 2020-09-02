@@ -1,4 +1,4 @@
-package cordova-plugin-inappbrowser;
+package ccom.outsystems.plugin.inappbrowsertests;
 
 import org.json.JSONException;
 import org.json.JSONObject;

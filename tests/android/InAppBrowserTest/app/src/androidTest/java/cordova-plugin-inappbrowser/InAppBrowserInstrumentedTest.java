@@ -21,6 +21,6 @@ public class InAppBrowserInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("cordova-plugin-inappbrowser", appContext.getPackageName());
+        assertEquals("com.outsystems.plugin.inappbrowsertests", appContext.getPackageName());
     }
 }
