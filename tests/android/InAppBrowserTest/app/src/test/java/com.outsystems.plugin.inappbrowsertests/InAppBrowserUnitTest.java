@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 @Config(manifest=Config.NONE)
 public class InAppBrowserUnitTest {
 
-    protected class TestableInAppBrowser extends InAppBrowser {
+    protected class TestableInAppBrowser {
         public String getPrivateHelloWorldString(JSONObject jsonObject, boolean withCache) {
             return privateHelloWorldString();
         }
