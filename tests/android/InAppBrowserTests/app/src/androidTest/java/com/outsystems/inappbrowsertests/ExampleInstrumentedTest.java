@@ -23,13 +23,4 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.outsystems.inappbrowsertests", appContext.getPackageName());
     }
-
-    @Test
-    public void usingSomethingAndroid() {
-        // Context of the app under test.
-        System.out.println("Check test");
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
-        assertEquals("com.outsystems.inappbrowsertests", appContext.getPackageName());
-    }
 }
