@@ -23,4 +23,32 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.outsystems.inappbrowsertests", appContext.getPackageName());
     }
+
+    @Test
+    public void useAppContext2() {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        assertEquals("com.outsystems.inappbrowsertests", appContext.getPackageName());
+    }
+
+    @Test
+    public void useAppContext3() {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        assertEquals("com.outsystems.inappbrowsertests", appContext.getPackageName());
+    }
+
+    @Test
+    public void useAppContext4() {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        assertEquals("com.outsystems.inappbrowsertests", appContext.getPackageName());
+    }
+
+    @Test
+    public void useAppContext5() {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        assertEquals("com.outsystems.inappbrowsertests", appContext.getPackageName());
+    }
 }
