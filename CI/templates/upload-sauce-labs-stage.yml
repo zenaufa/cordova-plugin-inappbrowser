@@ -1,0 +1,18 @@
+parameters:
+- name: sauceLabsUser
+  type: string
+  default: ''
+
+stages:
+  - stage: UploadSauceLabs
+    jobs:
+      - job: upload_sauce_labs
+        displayName: 'Upload to Sauce Labs'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - template: 'npm-steps.yml'
+            parameters:
+              workingDirectory: 'CI/templates'
+          - script: 'npm deploySauceLabs --sauceUser=${{ parameters.sauceLabsUser }} --buildsPath="$(System.DefaultWorkingDirectory)/builds/"'
+            workingDirectory: 'CI/templates'
