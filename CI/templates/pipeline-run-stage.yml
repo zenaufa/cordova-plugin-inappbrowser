@@ -1,0 +1,15 @@
+stages:
+  - stage: UITests Pipeline Run
+    variables:
+      sauceLabsJsonString: $[ stageDependencies.EnvironmentDeploymentBuild.environment_deployment_build.outputs['deploySauceLabs.mSauceLabsAppsID'] ]
+    jobs:
+      - job: run_tests_pipeline
+        displayName: 'Start UITests Pipeline'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - template: 'npm-steps.yml'
+            parameters:
+              workingDirectory: 'CI/templates'
+          - script: 'npm run startPipeline --jsonString="$(sauceLabsJsonString)"'
+            workingDirectory: 'CI/templates'
