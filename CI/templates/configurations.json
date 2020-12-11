@@ -1,0 +1,18 @@
+{
+    "moduleName": "InAppBrowserPlugin",
+    "applicationNames": [
+        "InAppBrowserPlugin",
+        "InAppBrowserSampleApp"
+    ],
+    "testPipelineArgs": {
+        "plugin": "in-app-browser",
+        "iosPipelineID": 429,
+        "androidPipelineID": 418
+    },
+    "sauceLabsInfo": {
+        "InAppBrowserSampleApp": {
+            "androidAPIKey": "DFEEED71BCBE47AEA11F31A2AECDB7A6",
+            "iosAPIKey": "AA4D85853822462AA5159B911F02E48C"
+        }
+    }
+}
