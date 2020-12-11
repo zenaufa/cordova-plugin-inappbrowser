@@ -1,0 +1,13 @@
+{
+    "moduleName": "InAppBrowserPlugin",
+    "applicationNames": [
+        "InAppBrowserPlugin",
+        "InAppBrowserSampleApp"
+    ],
+    "sauceLabsInfo": {
+        "InAppBrowserSampleApp": {
+            "androidAPIKey": " -- Insert here -- ",
+            "iosAPIKey": " -- Insert here -- "
+        }
+    }
+}
