@@ -20,10 +20,11 @@ jobs:
     - template: 'npm-steps.yml'
       parameters:
         workingDirectory: ${{ parameters.workingDirectory }}
+    - template: 'android-emulator-step.yml'
     - task: Gradle@2
       inputs:
         cwd: '${{ parameters.workingDirectory }}/InAppBrowserTests'
         gradleWrapperFile: '${{ parameters.workingDirectory }}/InAppBrowserTests/gradlew'
         publishJUnitResults: true
         testResultsFiles: '**/TEST-*.xml'
-        tasks: 'clean test'
+        tasks: 'clean test cAT'
