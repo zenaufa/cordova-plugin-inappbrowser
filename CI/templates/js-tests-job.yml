@@ -22,5 +22,5 @@ jobs:
     - template: 'npm-steps.yml'
       parameters:
         workingDirectory: ${{ parameters.workingDirectory }}
-    - script: 'echo successful tests' # Mocked response
+    - script: 'npm test'
       workingDirectory: ${{ parameters.workingDirectory }}
