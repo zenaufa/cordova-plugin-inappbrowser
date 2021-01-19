@@ -49,16 +49,16 @@
         },
         _loadAfterBeforeload: function (strUrl) {
             strUrl = urlutil.makeAbsolute(strUrl);
-            exec(null, null, rootName, 'loadAfterBeforeload', [strUrl]);
+            exec(null, null, this.rootName, 'loadAfterBeforeload', [strUrl]);
         },
         close: function (eventname) {
-            exec(null, null, rootName, 'close', []);
+            exec(null, null, this.rootName, 'close', []);
         },
         show: function (eventname) {
-            exec(null, null, rootName, 'show', []);
+            exec(null, null, this.rootName, 'show', []);
         },
         hide: function (eventname) {
-            exec(null, null, rootName, 'hide', []);
+            exec(null, null, this.rootName, 'hide', []);
         },
         addEventListener: function (eventname, f) {
             if (eventname in this.channels) {
@@ -73,9 +73,9 @@
 
         executeScript: function (injectDetails, cb) {
             if (injectDetails.code) {
-                exec(cb, null, rootName, 'injectScriptCode', [injectDetails.code, !!cb]);
+                exec(cb, null, this.rootName, 'injectScriptCode', [injectDetails.code, !!cb]);
             } else if (injectDetails.file) {
-                exec(cb, null, rootName, 'injectScriptFile', [injectDetails.file, !!cb]);
+                exec(cb, null, this.rootName, 'injectScriptFile', [injectDetails.file, !!cb]);
             } else {
                 throw new Error('executeScript requires exactly one of code or file to be specified');
             }
@@ -83,9 +83,9 @@
 
         insertCSS: function (injectDetails, cb) {
             if (injectDetails.code) {
-                exec(cb, null, rootName, 'injectStyleCode', [injectDetails.code, !!cb]);
+                exec(cb, null, this.rootName, 'injectStyleCode', [injectDetails.code, !!cb]);
             } else if (injectDetails.file) {
-                exec(cb, null, rootName, 'injectStyleFile', [injectDetails.file, !!cb]);
+                exec(cb, null, this.rootName, 'injectStyleFile', [injectDetails.file, !!cb]);
             } else {
                 throw new Error('insertCSS requires exactly one of code or file to be specified');
             }
