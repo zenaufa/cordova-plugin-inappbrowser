@@ -5,7 +5,7 @@
         "InAppBrowserSampleApp"
     ],
     "testPipelineArgs": {
-        "plugin": "inappbrowser",
+        "plugin": "in-app-browser",
         "threads": "2"
     },
     "sauceLabsInfo": {
