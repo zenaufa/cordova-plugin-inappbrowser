@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [4.0.0-OS6] - 2021-05-14
+## [4.0.0-OS5] - 2021-05-14
 ### Fix
 - Close button has an incorrect name after setting button caption as "Empty" (Android) [RMET-331](https://outsystemsrd.atlassian.net/browse/RMET-331)
 
