@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0-OS5] - 2021-05-14
+### Fix
+- Close button has an incorrect name after setting button caption as "Empty" (Android) [RMET-331](https://outsystemsrd.atlassian.net/browse/RMET-331)
+
 ## [3.1.0-OS3] - 2020-01-08
 ### Changes
 - Add compile-time decision for disabling UIWebView [RNMT-3569](https://outsystemsrd.atlassian.net/browse/RNMT-3569)
