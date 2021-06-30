@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fix - 2021-06-30
+- On iOS page scrolling back to top after clicking Done in form input field [RMET-753](https://outsystemsrd.atlassian.net/browse/RMET-753)
+
 ## [4.0.0-OS5] - 2021-05-14
 ### Fix
 - Close button has an incorrect name after setting button caption as "Empty" (Android) [RMET-331](https://outsystemsrd.atlassian.net/browse/RMET-331)
