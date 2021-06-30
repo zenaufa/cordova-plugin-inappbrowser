@@ -898,7 +898,10 @@ BOOL isExiting = FALSE;
     [self.view addSubview:self.backgroundView];
     [self.view sendSubviewToBack:self.backgroundView];
 
-    if (@available(iOS 12.0, *)) {
+    if (@available(iOS 13.4, *)) {
+        // do nothing
+    }
+    else if (@available(iOS 12.0, *)) {
         [[NSNotificationCenter defaultCenter]
             addObserver:self
                selector:@selector(keyboardWillHide)
