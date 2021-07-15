@@ -661,19 +661,9 @@ static CDVWKInAppBrowser* instance = nil;
         self.callbackId = nil;
     }
     
-    [self.inAppBrowserViewController.configuration.userContentController removeScriptMessageHandlerForName:IAB_BRIDGE_NAME];
-    self.inAppBrowserViewController.configuration = nil;
-    
     [self.inAppBrowserViewController.webView stopLoading];
-    [self.inAppBrowserViewController.webView removeFromSuperview];
-    [self.inAppBrowserViewController.webView setUIDelegate:nil];
-    [self.inAppBrowserViewController.webView setNavigationDelegate:nil];
-    self.inAppBrowserViewController.webView = nil;
-    
-    // Set navigationDelegate to nil to ensure no callbacks are received from it.
-    self.inAppBrowserViewController.navigationDelegate = nil;
-    self.inAppBrowserViewController = nil;
-
+    [self.inAppBrowserViewController navigateTo:([NSURL URLWithString:@"about:blank"])];
+        
     // Set tmpWindow to hidden to make main webview responsive to touch again
     // Based on https://stackoverflow.com/questions/4544489/how-to-remove-a-uiwindow
     self->tmpWindow.hidden = YES;
