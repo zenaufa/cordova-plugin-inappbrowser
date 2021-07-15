@@ -200,10 +200,12 @@ static CDVWKInAppBrowser* instance = nil;
     if (self.inAppBrowserViewController == nil) {
         self.inAppBrowserViewController = [[CDVWKInAppBrowserViewController alloc] initWithBrowserOptions: browserOptions andSettings:self.commandDelegate.settings];
         self.inAppBrowserViewController.navigationDelegate = self;
-        
         if ([self.viewController conformsToProtocol:@protocol(CDVScreenOrientationDelegate)]) {
             self.inAppBrowserViewController.orientationDelegate = (UIViewController <CDVScreenOrientationDelegate>*)self.viewController;
         }
+    }
+    else {
+        [self.inAppBrowserViewController updateViews:browserOptions andSettings:self.commandDelegate.settings];
     }
     
     [self.inAppBrowserViewController showLocationBar:browserOptions.location];
@@ -661,8 +663,19 @@ static CDVWKInAppBrowser* instance = nil;
         self.callbackId = nil;
     }
     
+    [self.inAppBrowserViewController.configuration.userContentController removeScriptMessageHandlerForName:IAB_BRIDGE_NAME];
+    self.inAppBrowserViewController.configuration = nil;
+
     [self.inAppBrowserViewController.webView stopLoading];
     [self.inAppBrowserViewController navigateTo:([NSURL URLWithString:@"about:blank"])];
+    [self.inAppBrowserViewController.webView removeFromSuperview];
+    [self.inAppBrowserViewController.webView setUIDelegate:nil];
+    [self.inAppBrowserViewController.webView setNavigationDelegate:nil];
+     
+    [self.inAppBrowserViewController.spinner removeFromSuperview];
+    [self.inAppBrowserViewController.toolbar removeFromSuperview];
+    [self.inAppBrowserViewController.addressLabel removeFromSuperview];
+    [self.inAppBrowserViewController.backgroundView removeFromSuperview];
         
     // Set tmpWindow to hidden to make main webview responsive to touch again
     // Based on https://stackoverflow.com/questions/4544489/how-to-remove-a-uiwindow
@@ -705,8 +718,14 @@ BOOL isExiting = FALSE;
     return self;
 }
 
--(void)dealloc {
+- (void)dealloc {
     //NSLog(@"dealloc");
+}
+
+- (void)updateViews: (CDVInAppBrowserOptions*) browserOptions andSettings:(NSDictionary*) settings {
+   _browserOptions = browserOptions;
+   _settings = settings;
+   [self createViews];
 }
 
 - (void)createViews
@@ -738,9 +757,12 @@ BOOL isExiting = FALSE;
         configuration.mediaPlaybackRequiresUserAction = _browserOptions.mediaplaybackrequiresuseraction;
     }
     
-    
-
-    self.webView = [[WKWebView alloc] initWithFrame:webViewBounds configuration:configuration];
+    if(self.webView == nil) {
+        self.webView = [[WKWebView alloc] initWithFrame:webViewBounds configuration:configuration];
+    }
+    else {
+        self.webView.frame = webViewBounds;
+    }
     
     [self.view addSubview:self.webView];
     [self.view sendSubviewToBack:self.webView];
