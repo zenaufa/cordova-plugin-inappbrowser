@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fix
+- Removed code that is only used in iOS 11 and older [RPM-1453](https://outsystemsrd.atlassian.net/browse/RPM-1453)
 
 ### [4.0.0-OS6] - 2021-06-30
 - On iOS page scrolling back to top after clicking Done in form input field [RMET-753](https://outsystemsrd.atlassian.net/browse/RMET-753)
