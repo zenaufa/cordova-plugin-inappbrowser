@@ -1,6 +1,6 @@
 import SafariServices
 
-class SafariBrowserPlugin: NSObject {
+class SafariBrowserPlugin: NSObject, SFSafariViewControllerDelegate {
     
     private let cacheManager: WebsiteCacheManager
     private var inAppBrowserViewController: SafariViewController?
@@ -78,10 +78,7 @@ class SafariBrowserPlugin: NSObject {
         window?.isHidden = true
         window?.resignKey()
     }
-}
 
-extension SafariBrowserPlugin: SFSafariViewControllerDelegate {
-    
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         closeBrowser()
     }
