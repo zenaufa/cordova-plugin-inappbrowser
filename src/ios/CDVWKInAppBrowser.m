@@ -711,7 +711,8 @@ BOOL isExiting = FALSE;
         configuration.mediaPlaybackRequiresUserAction = _browserOptions.mediaplaybackrequiresuseraction;
     }
     
-    
+    // SSO Flow workaround to prevent WKWebSiteDataStorage to affect negatively 
+    configuration.websiteDataStore = [WKWebsiteDataStore nonPersistentDataStore];
 
     self.webView = [[WKWebView alloc] initWithFrame:webViewBounds configuration:configuration];
     
