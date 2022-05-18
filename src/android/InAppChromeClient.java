@@ -182,7 +182,6 @@ public class InAppChromeClient extends WebChromeClient {
             String[] permissionArray = new String[permissions.size()];
             permissionArray = permissions.toArray(permissionArray);
             lastPermissionRequest = request;
-            plugin.cordova.setActivityResultCallback(plugin);
             PermissionHelper.requestPermissions(plugin, PERMISSION_REQUEST_CODE, permissionArray);
             Log.d(LOG_TAG, "Requesting permissions :" + permissions);
         }
@@ -200,6 +199,5 @@ public class InAppChromeClient extends WebChromeClient {
     public void handleOnPermissionResult(String[] permissions, int[] grantResults) {
         lastPermissionRequest.grant(lastPermissionRequest.getResources());
     }
-
 
 }
