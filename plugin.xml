@@ -36,13 +36,21 @@
 
     <!-- android -->
     <platform name="android">
+
         <js-module src="www/inappbrowser.js" name="inappbrowser">
             <clobbers target="cordova.InAppBrowser" />
         </js-module>
+
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="InAppBrowser">
                 <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser"/>
             </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.CAMERA" />
+            <uses-permission android:name="android.permission.RECORD_AUDIO" />
+            <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
         </config-file>
 
         <hook type="before_plugin_install" src="hooks/outsystems/handle_cleartextTrafficPermitted.js" />
