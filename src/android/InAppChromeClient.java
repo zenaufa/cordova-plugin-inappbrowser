@@ -21,25 +21,37 @@ package org.apache.cordova.inappbrowser;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.LOG;
 import org.apache.cordova.PluginResult;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PermissionHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.Manifest;
+import android.util.Log;
 import android.webkit.JsPromptResult;
+import android.webkit.PermissionRequest;
 import android.webkit.WebChromeClient;
 import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.GeolocationPermissions.Callback;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class InAppChromeClient extends WebChromeClient {
 
     private CordovaWebView webView;
-    private String LOG_TAG = "InAppChromeClient";
+    private CordovaPlugin plugin;
+    private static String LOG_TAG = "InAppChromeClient";
+    public static int PERMISSION_REQUEST_CODE = 11223344;
     private long MAX_QUOTA = 100 * 1024 * 1024;
+    private PermissionRequest lastPermissionRequest;
 
-    public InAppChromeClient(CordovaWebView webView) {
+    public InAppChromeClient(CordovaPlugin plugin, CordovaWebView webView) {
         super();
         this.webView = webView;
+        this.plugin = plugin;
     }
     /**
      * Handle database quota exceeded notification.
@@ -52,9 +64,12 @@ public class InAppChromeClient extends WebChromeClient {
      * @param quotaUpdater
      */
     @Override
-    public void onExceededDatabaseQuota(String url, String databaseIdentifier, long currentQuota, long estimatedSize,
-            long totalUsedQuota, WebStorage.QuotaUpdater quotaUpdater)
-    {
+    public void onExceededDatabaseQuota(String url,
+                                        String databaseIdentifier,
+                                        long currentQuota,
+                                        long estimatedSize,
+                                        long totalUsedQuota,
+                                        WebStorage.QuotaUpdater quotaUpdater) {
         LOG.d(LOG_TAG, "onExceededDatabaseQuota estimatedSize: %d  currentQuota: %d  totalUsedQuota: %d", estimatedSize, currentQuota, totalUsedQuota);
         quotaUpdater.updateQuota(MAX_QUOTA);
     }
@@ -133,6 +148,56 @@ public class InAppChromeClient extends WebChromeClient {
             }
         }
         return false;
+    }
+
+    @Override
+    public void onPermissionRequest(PermissionRequest request) {
+
+        List<String> permissions = new ArrayList<String>();
+        for (String r: request.getResources()) {
+            switch (r){
+                case "android.webkit.resource.AUDIO_CAPTURE": {
+                    if(!PermissionHelper.hasPermission(plugin, Manifest.permission.MODIFY_AUDIO_SETTINGS)){
+                        permissions.add(Manifest.permission.MODIFY_AUDIO_SETTINGS);
+                    }
+                    if(!PermissionHelper.hasPermission(plugin, Manifest.permission.RECORD_AUDIO)){
+                        permissions.add(Manifest.permission.RECORD_AUDIO);
+                    }
+                    break;
+                }
+                case "android.webkit.resource.VIDEO_CAPTURE": {
+                    if(!PermissionHelper.hasPermission(plugin, Manifest.permission.CAMERA)){
+                        permissions.add(Manifest.permission.CAMERA);
+                    }
+                    break;
+                }
+                default: {
+                    Log.d(LOG_TAG, "Permission not found for: " + r);
+                    break;
+                }
+            }
+        }
+
+        if(permissions.size() > 0) {
+            String[] permissionArray = new String[permissions.size()];
+            permissionArray = permissions.toArray(permissionArray);
+            lastPermissionRequest = request;
+            PermissionHelper.requestPermissions(plugin, PERMISSION_REQUEST_CODE, permissionArray);
+            Log.d(LOG_TAG, "Requesting permissions :" + permissions);
+        }
+        else {
+            request.grant(request.getResources());
+        }
+    }
+
+    @Override
+    public void onPermissionRequestCanceled(PermissionRequest request) {
+        super.onPermissionRequestCanceled(request);
+        Log.d(LOG_TAG, "Permission request canceled");
+    }
+
+    public void handleOnPermissionResult(String[] permissions, int[] grantResults) {
+        lastPermissionRequest.grant(lastPermissionRequest.getResources());
     }
 
 }
