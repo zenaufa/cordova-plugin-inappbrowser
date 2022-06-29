@@ -20,7 +20,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
            id="cordova-plugin-inappbrowser"
-      version="4.0.0-OS11">
+      version="4.0.0-OS12">
 
     <name>InAppBrowser</name>
     <description>Cordova InAppBrowser Plugin</description>
@@ -107,7 +107,7 @@
         <source-file src="src/ios/SafariBrowserConfigurations.swift" />
 
 	    <framework src="CoreGraphics.framework" />
-        <dependency url="https://github.com/agoncalvesos/cordova-plugin-add-swift-support" id="cordova-plugin-add-swift-support"/>
+        <dependency id="cordova-plugin-add-swift-support" url="https://github.com/OutSystems/cordova-plugin-add-swift-support.git#2.0.3-OS1"/>
     </platform>
 
     <!-- osx -->
