@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [Unreleased]
+### Fix
+- Android - InAppBrowser not opening when no options are passed - check for next element before trying to obtain. (https://outsystemsrd.atlassian.net/browse/RMET-2119)
+
 ### [4.0.0-OS12] - 2022-06-29
 ### Fix
 - Removed hook that adds swift support and added the plugin as dependecy. (https://outsystemsrd.atlassian.net/browse/RMET-1680)
