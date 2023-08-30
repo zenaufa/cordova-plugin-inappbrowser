@@ -166,7 +166,6 @@ public class InAppBrowser extends CordovaPlugin {
      */
     public boolean execute(String action, CordovaArgs args, final CallbackContext callbackContext) throws JSONException {
         if (action.equals("open")) {
-            this.callbackContext = callbackContext;
             final String url = args.getString(0);
             String t = args.optString(1);
             if (t == null || t.equals("") || t.equals(NULL)) {
@@ -176,6 +175,11 @@ public class InAppBrowser extends CordovaPlugin {
             final HashMap<String, String> features = parseFeature(args.optString(2));
 
             LOG.d(LOG_TAG, "target = " + target);
+
+            final boolean keepCallback = !SYSTEM.equals(target);
+            if (keepCallback) {
+                this.callbackContext = callbackContext;
+            }
 
             this.cordova.getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -254,7 +258,7 @@ public class InAppBrowser extends CordovaPlugin {
                     }
 
                     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
-                    pluginResult.setKeepCallback(true);
+                    pluginResult.setKeepCallback(keepCallback);
                     callbackContext.sendPluginResult(pluginResult);
                 }
             });
@@ -271,12 +275,6 @@ public class InAppBrowser extends CordovaPlugin {
                 @SuppressLint("NewApi")
                 @Override
                 public void run() {
-                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
-                        currentClient.waitForBeforeload = false;
-                        inAppWebView.setWebViewClient(currentClient);
-                    } else {
-                        ((InAppBrowserClient)inAppWebView.getWebViewClient()).waitForBeforeload = false;
-                    }
                     inAppWebView.loadUrl(url);
                 }
             });
@@ -360,7 +358,7 @@ public class InAppBrowser extends CordovaPlugin {
      */
     @Override
     public void onPause(boolean multitasking) {
-        if (shouldPauseInAppBrowser) {
+        if (shouldPauseInAppBrowser && inAppWebView != null) {
             inAppWebView.onPause();
         }
     }
@@ -370,7 +368,7 @@ public class InAppBrowser extends CordovaPlugin {
      */
     @Override
     public void onResume(boolean multitasking) {
-        if (shouldPauseInAppBrowser) {
+        if (shouldPauseInAppBrowser && inAppWebView != null) {
             inAppWebView.onResume();
         }
     }
@@ -549,6 +547,16 @@ public class InAppBrowser extends CordovaPlugin {
                             dialog.dismiss();
                             dialog = null;
                         }
+
+                        // Fix for webView window not being destroyed correctly causing memory leak
+                        // (https://github.com/apache/cordova-plugin-inappbrowser/issues/290)
+                        if (url.equals("about:blank")) {
+                            inAppWebView.onPause();
+                            inAppWebView.removeAllViews();
+                            inAppWebView.destroyDrawingCache();
+                            inAppWebView.destroy();
+                            inAppWebView = null;
+                        }
                     }
                 });
                 // NB: From SDK 19: "If you call methods on WebView from any thread
@@ -647,48 +655,48 @@ public class InAppBrowser extends CordovaPlugin {
         if (features != null) {
             String show = features.get(LOCATION);
             if (show != null) {
-                showLocationBar = show.equals("yes") ? true : false;
+                showLocationBar = show.equals("yes");
             }
             if(showLocationBar) {
                 String hideNavigation = features.get(HIDE_NAVIGATION);
                 String hideUrl = features.get(HIDE_URL);
-                if(hideNavigation != null) hideNavigationButtons = hideNavigation.equals("yes") ? true : false;
-                if(hideUrl != null) hideUrlBar = hideUrl.equals("yes") ? true : false;
+                if(hideNavigation != null) hideNavigationButtons = hideNavigation.equals("yes");
+                if(hideUrl != null) hideUrlBar = hideUrl.equals("yes");
             }
             String zoom = features.get(ZOOM);
             if (zoom != null) {
-                showZoomControls = zoom.equals("yes") ? true : false;
+                showZoomControls = zoom.equals("yes");
             }
             String hidden = features.get(HIDDEN);
             if (hidden != null) {
-                openWindowHidden = hidden.equals("yes") ? true : false;
+                openWindowHidden = hidden.equals("yes");
             }
             String hardwareBack = features.get(HARDWARE_BACK_BUTTON);
             if (hardwareBack != null) {
-                hadwareBackButton = hardwareBack.equals("yes") ? true : false;
+                hadwareBackButton = hardwareBack.equals("yes");
             } else {
                 hadwareBackButton = DEFAULT_HARDWARE_BACK;
             }
             String mediaPlayback = features.get(MEDIA_PLAYBACK_REQUIRES_USER_ACTION);
             if (mediaPlayback != null) {
-                mediaPlaybackRequiresUserGesture = mediaPlayback.equals("yes") ? true : false;
+                mediaPlaybackRequiresUserGesture = mediaPlayback.equals("yes");
             }
             String cache = features.get(CLEAR_ALL_CACHE);
             if (cache != null) {
-                clearAllCache = cache.equals("yes") ? true : false;
+                clearAllCache = cache.equals("yes");
             } else {
                 cache = features.get(CLEAR_SESSION_CACHE);
                 if (cache != null) {
-                    clearSessionCache = cache.equals("yes") ? true : false;
+                    clearSessionCache = cache.equals("yes");
                 }
             }
             String shouldPause = features.get(SHOULD_PAUSE);
             if (shouldPause != null) {
-                shouldPauseInAppBrowser = shouldPause.equals("yes") ? true : false;
+                shouldPauseInAppBrowser = shouldPause.equals("yes");
             }
             String wideViewPort = features.get(USER_WIDE_VIEW_PORT);
             if (wideViewPort != null ) {
-                useWideViewPort = wideViewPort.equals("yes") ? true : false;
+                useWideViewPort = wideViewPort.equals("yes");
             }
             String closeButtonCaptionSet = features.get(CLOSE_BUTTON_CAPTION);
             if (closeButtonCaptionSet != null) {
@@ -713,18 +721,18 @@ public class InAppBrowser extends CordovaPlugin {
             }
             String showFooterSet = features.get(FOOTER);
             if (showFooterSet != null) {
-                showFooter = showFooterSet.equals("yes") ? true : false;
+                showFooter = showFooterSet.equals("yes");
             }
             String footerColorSet = features.get(FOOTER_COLOR);
             if (footerColorSet != null) {
                 footerColor = footerColorSet;
             }
-            if (features.get(BEFORELOAD) != null) {
-                beforeload = features.get(BEFORELOAD);
-            }
+            
+            beforeload = features.get(BEFORELOAD) != null ? features.get(BEFORELOAD) : "";
+
             String fullscreenSet = features.get(FULLSCREEN);
             if (fullscreenSet != null) {
-                fullscreen = fullscreenSet.equals("yes") ? true : false;
+                fullscreen = fullscreenSet.equals("yes");
             }
         }
 
@@ -812,7 +820,6 @@ public class InAppBrowser extends CordovaPlugin {
         EditText edittext;
         CordovaWebView webView;
         String beforeload;
-        boolean waitForBeforeload;
 
         /**
          * Constructor.
@@ -824,7 +831,6 @@ public class InAppBrowser extends CordovaPlugin {
             this.webView = webView;
             this.edittext = mEditText;
             this.beforeload = beforeload;
-            this.waitForBeforeload = beforeload != null;
         }
 
         /**
@@ -885,7 +891,7 @@ public class InAppBrowser extends CordovaPlugin {
             }
 
             // On first URL change, initiate JS callback. Only after the beforeload event, continue.
-            if (useBeforeload && this.waitForBeforeload) {
+            if (useBeforeload) {
                 if(sendBeforeLoad(url, method)) {
                     return true;
                 }
@@ -980,9 +986,6 @@ public class InAppBrowser extends CordovaPlugin {
                 }
             }
 
-            if (useBeforeload) {
-                this.waitForBeforeload = true;
-            }
             return override;
         }
 
