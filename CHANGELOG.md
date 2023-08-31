@@ -6,11 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [Unreleased]
 
+### [4.0.0-OS14] - 2023-08-31
 ### Fixes
 - Do not lose callbackContext when opening a SYSTEM url (https://outsystemsrd.atlassian.net/browse/RMET-2802).
 - Fix beforeLoad not being called in some requests (https://outsystemsrd.atlassian.net/browse/RMET-2802).
 - Fix memory leak with webview (https://outsystemsrd.atlassian.net/browse/RMET-2802).
 
+### [4.0.0-OS13] - 2023-01-18
 ### Fix
 - Android - InAppBrowser not opening when no options are passed - check for next element before trying to obtain. (https://outsystemsrd.atlassian.net/browse/RMET-2119)
 
