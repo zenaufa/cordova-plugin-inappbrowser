@@ -36,14 +36,14 @@
 
     <!-- android -->
     <platform name="android">
-	<preference name="AppendUserAgent" default="Chrome/105.0.5195.136" />
+	<preference name="OverrideUserAgent" default="Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.186 Mobile Safari/537.36" />
         <js-module src="www/inappbrowser.js" name="inappbrowser">
             <clobbers target="cordova.InAppBrowser" />
         </js-module>
 
         <config-file target="res/xml/config.xml" parent="/*">
 	    <platform name="android">
-   		<preference name="AppendUserAgent" value="Chrome/105.0.5195.136" />
+   		<preference name="OverrideUserAgent" value="Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.186 Mobile Safari/537.36" />
 	    </platform>
             <feature name="InAppBrowser">
                 <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser"/>
@@ -82,13 +82,13 @@
 
     <!-- ios -->
     <platform name="ios">
-	<preference name="AppendUserAgent" default="Chrome/105.0.5195.136" />
+	<preference name="OverrideUserAgent" default="Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.186 Mobile Safari/537.36" />
         <js-module src="www/inappbrowser.js" name="inappbrowser">
             <clobbers target="cordova.InAppBrowser" />
         </js-module>
         <config-file target="config.xml" parent="/*">
 	    <platform name="ios">
-   		<preference name="AppendUserAgent" value="Chrome/105.0.5195.136" />
+   		<preference name="OverrideUserAgent" value="Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.186 Mobile Safari/537.36" />
 	    </platform>	
             <feature name="InAppBrowser">
                 <param name="ios-package" value="CDVWKInAppBrowser" />
@@ -119,13 +119,13 @@
 
     <!-- osx -->
     <platform name="osx">
-	<preference name="AppendUserAgent" default="Chrome/105.0.5195.136" />
+	<preference name="OverrideUserAgent" default="Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.186 Mobile Safari/537.36" />
         <js-module src="www/inappbrowser.js" name="inappbrowser">
             <clobbers target="cordova.InAppBrowser" />
         </js-module>
         <config-file target="config.xml" parent="/*">
 	    <platform name="osx">
-   		<preference name="AppendUserAgent" value="Chrome/105.0.5195.136" />
+   		<preference name="OverrideUserAgent" value="Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.186 Mobile Safari/537.36" />
 	    </platform>
             <feature name="InAppBrowser">
                 <param name="osx-package" value="CDVInAppBrowser" />
@@ -138,7 +138,7 @@
 
     <!-- windows -->
     <platform name="windows">
-	<preference name="AppendUserAgent" default="Chrome/105.0.5195.136" />
+	<preference name="OverrideUserAgent" default="Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.186 Mobile Safari/537.36" />
         <js-module src="www/inappbrowser.js" name="inappbrowser">
             <clobbers target="cordova.InAppBrowser" />
         </js-module>
@@ -150,7 +150,7 @@
 
     <!-- browser -->
     <platform name="browser">
-	<preference name="AppendUserAgent" default="Chrome/105.0.5195.136" />
+	<preference name="OverrideUserAgent" default="Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.186 Mobile Safari/537.36" />
         <js-module src="www/inappbrowser.js" name="inappbrowser">
             <clobbers target="cordova.InAppBrowser" />
         </js-module>
