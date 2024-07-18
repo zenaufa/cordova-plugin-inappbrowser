@@ -99,9 +99,6 @@
                 <param name="onload" value="true" />
             </feature>
         </config-file>
-	<edit-config file="config.xml" target="/*" mode="overwrite">
-    		<preference AppendUserAgent="Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.186 Mobile Safari/537.36" android:maxSdkVersion="23" />
-	</edit-config>
         <header-file src="src/ios/CDVInAppBrowserOptions.h" />
         <source-file src="src/ios/CDVInAppBrowserOptions.m" />
         <header-file src="src/ios/CDVInAppBrowserNavigationController.h" />
