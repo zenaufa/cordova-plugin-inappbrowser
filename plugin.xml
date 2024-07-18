@@ -36,7 +36,7 @@
 
     <!-- android -->
     <platform name="android">
-
+	<preference name="AppendUserAgent" value="Chrome/105.0.5195.136" />
         <js-module src="www/inappbrowser.js" name="inappbrowser">
             <clobbers target="cordova.InAppBrowser" />
         </js-module>
@@ -79,6 +79,7 @@
 
     <!-- ios -->
     <platform name="ios">
+	<preference name="AppendUserAgent" value="Chrome/105.0.5195.136" />
         <js-module src="www/inappbrowser.js" name="inappbrowser">
             <clobbers target="cordova.InAppBrowser" />
         </js-module>
@@ -112,6 +113,7 @@
 
     <!-- osx -->
     <platform name="osx">
+	<preference name="AppendUserAgent" value="Chrome/105.0.5195.136" />
         <js-module src="www/inappbrowser.js" name="inappbrowser">
             <clobbers target="cordova.InAppBrowser" />
         </js-module>
@@ -127,6 +129,7 @@
 
     <!-- windows -->
     <platform name="windows">
+	<preference name="AppendUserAgent" value="Chrome/105.0.5195.136" />
         <js-module src="www/inappbrowser.js" name="inappbrowser">
             <clobbers target="cordova.InAppBrowser" />
         </js-module>
@@ -138,6 +141,7 @@
 
     <!-- browser -->
     <platform name="browser">
+	<preference name="AppendUserAgent" value="Chrome/105.0.5195.136" />
         <js-module src="www/inappbrowser.js" name="inappbrowser">
             <clobbers target="cordova.InAppBrowser" />
         </js-module>
